@@ -19,12 +19,12 @@ def main_page():
 
 @app.route("/college")
 def college():
-    return render_template("college_admin.html", college_names=college_names)
+    return render_template("college.html", college_names=college_names)
 
 
 @app.route("/coaching")
 def coaching():
-    return render_template("coaching_institute.html")
+    return render_template("coaching.html", coaching_names=coaching_names)
 
 
 @app.route("/student")
@@ -50,37 +50,51 @@ def parent():
 
 # --------------------------------------------------- coaching -----------------------------------------------
 
+
+
 query = "SELECT * from coaching_institute"
 cursor.execute(query)
-res = cursor.fetchall()
-institute_id = 1
-for i in res:
-    institute_id += 1
+result = cursor.fetchall()
+coaching_names = []
+for i in result:
+    coaching_names.append(i[1])
 
 @app.route("/coaching/success", methods=["GET", "POST"])
 def receive_coaching_data():
-    name = request.form["name"]
-    exam = request.form["exam"]
-    selection = request.form["selection"]
-    location = request.form["location"]
-    fee = request.form["fee"]
-    hostel_availability = request.form["hostel"]
-    columns = [name, location, exam, fee, hostel_availability, selection]
+    selected = request.form["selected"]
+    college_id = -1
+    for i in range(len(coaching_names)):
+        if selected == coaching_names[i]:
+            college_id = i + 1
+            break
 
-    insert("coaching_institute", columns)
+    name_update = request.form["name-update"]
+    taught_update = request.form["taught-update"]
+    fee_update = request.form["fee-update"]
+    hostel_avail_update = request.form["hostel-update"]
+
+    if not (name_update == ""):
+        update_coaching(college_id, 'coaching_institute', 'institute_name', name_update)
+
+    if not (fee_update == ""):
+        update_coaching(college_id, 'coaching_institute', 'fees', fee_update)
+
+    if not (hostel_avail_update == ""):
+        update_coaching(college_id, 'coaching_institute', 'hostel_availability', hostel_avail_update)
+
+    if not (taught_update == ""):
+        update_coaching(college_id, 'coaching_institute', 'exams_taught', taught_update)
+
     return "Success"
 
 
-def insert(table, columns):
-    print("INSERT INTO`coaching_institute` "
-          "(`institute_id`, `institute_name`, `location_id`, `exams_taught`, `fees`, `hostel_availability`, `results`) "
-          "VALUES ('" + str(institute_id) + "', '" + columns[0] + "', '" + columns[1] + "', '" + columns[2] + "', '" + columns[3] + "', '" +
-          columns[4] + "', '" + columns[5] + "')")
-    cursor.execute("INSERT INTO`coaching_institute` "
-                   "(`institute_id`, `institute_name`, `location_id`, `exams_taught`, `fees`, `hostel_availability`, `results`) "
-                   "VALUES ('" + str(institute_id) + "', '" + columns[0] + "', '" + columns[1] + "', '" + columns[2] + "', '" + columns[
-                       3] + "', '" + columns[4] + "', '" + columns[5] + "')")
+
+def update_coaching(college_id, table, column, value):
+    print("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(college_id) + "')")
+    cursor.execute("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`institute_id` = '" + str(college_id) + "')")
     mydb.commit()
+    pass
+
 
 # ---------------------------------------------coaching end----------------------------------------------------------
 
@@ -143,8 +157,7 @@ def receive_college_data():
 
 def update(college_id, table, column, value):
     print("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(college_id) + "')")
-    cursor.execute(
-        "UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(college_id) + "')")
+    cursor.execute("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(college_id) + "')")
     mydb.commit()
 
 # ------------------------------------------------college end---------------------------------------------------------
@@ -152,3 +165,33 @@ def update(college_id, table, column, value):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
+# query = "SELECT * from coaching_institute"
+# cursor.execute(query)
+# res = cursor.fetchall()
+# institute_id = 1
+# for i in res:
+#     institute_id += 1
+
+
+# def insert(columns):
+#     print("INSERT INTO`coaching_institute` "
+#           "(`institute_id`, `institute_name`, `location_id`, `exams_taught`, `fees`, `hostel_availability`, `results`) "
+#           "VALUES ('" + str(institute_id) + "', '" + columns[0] + "', '" + columns[1] + "', '" + columns[2] + "', '" + columns[3] + "', '" +
+#           columns[4] + "', '" + columns[5] + "')")
+#     cursor.execute("INSERT INTO`coaching_institute` "
+#                    "(`institute_id`, `institute_name`, `location_id`, `exams_taught`, `fees`, `hostel_availability`, `results`) "
+#                    "VALUES ('" + str(institute_id) + "', '" + columns[0] + "', '" + columns[1] + "', '" + columns[2] + "', '" + columns[
+#                        3] + "', '" + columns[4] + "', '" + columns[5] + "')")
+#     mydb.commit()
+
+    # name = request.form["name"]
+    # exam = request.form["exam"]
+    # selection = request.form["selection"]
+    # location = request.form["location"]
+    # fee = request.form["fee"]
+    # hostel_availability = request.form["hostel"]
+    # columns = [name, location, exam, fee, hostel_availability, selection]
+    # insert(columns)
