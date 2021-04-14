@@ -54,7 +54,7 @@ def sort_colleges():
     return rank+cbse+interest+exam+state
 
 
-@app.route("/student/success", methods=["GET", "POST"])
+@app.route("/student/success2", methods=["GET", "POST"])
 def sort_entrance_exams():
     date = request.form["date"]
     mode_of_exam = request.form["mode-of-exam"]
@@ -62,7 +62,7 @@ def sort_entrance_exams():
     return date+mode_of_exam+stream
 
 
-@app.route("/student/success", methods=["GET", "POST"])
+@app.route("/student/success3", methods=["GET", "POST"])
 def sort_coaching_institutes():
     exam = request.form["exam"]
     state = request.form["state"]

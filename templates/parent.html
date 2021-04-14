@@ -43,8 +43,8 @@
                 <form action="{{ url_for('sort_colleges_parent') }}" method="post" class="needs-validation" novalidate>
 
                     <div class="col-md-4">
-                        <label for="fee" class="form-label">Max Fee per semester</label>
-                        <select class="form-select" id="fee" name="fee">
+                        <label class="form-label">Max Fee per semester</label>
+                        <select class="form-select" name="fee">
                             <option>Any</option>
                             <option>Less than Rs 50K</option>
                             <option>Between 50K to 100K</option>
@@ -60,8 +60,8 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label for="state" class="form-label">State</label>
-                        <select class="form-select" id="state" name="state">
+                        <label class="form-label">State</label>
+                        <select class="form-select" name="state">
                             <option value="">Choose...</option>
                             <option>Andhra Pradesh</option>
                             <option>Arunachal Pradesh</option>
@@ -119,8 +119,8 @@
             <form action="{{ url_for('sort_coaching_institutes_parent') }}" method="post" class="needs-validation" novalidate>
 
                 <div class="col-md-4">
-                    <label for="fees" class="form-label">Max Fee per year</label>
-                    <select class="form-select" id="fees" name="fee-bottom">
+                    <label class="form-label">Max Fee per year</label>
+                    <select class="form-select"  name="fee-bottom">
                         <option>Any</option>
                         <option>Less than Rs 50K</option>
                         <option>Between 50K to 100K</option>
@@ -137,8 +137,8 @@
                 </div>
 
                 <div class="col-md-4">
-                    <label for="state" class="form-label">State</label>
-                    <select class="form-select" id="states" name="state-bottom">
+                    <label class="form-label">State</label>
+                    <select class="form-select" name="state-bottom">
                         <option value="">Choose...</option>
                         <option>Andhra Pradesh</option>
                         <option>Arunachal Pradesh</option>
@@ -174,8 +174,8 @@
                 </div>
 
                 <div class="col-md-4">
-                    <label for="packages" class="form-label">Number of Students Selected in Prestigious Institutions</label>
-                    <select class="form-select" id="packages" name="selections">
+                    <label class="form-label">Number of Students Selected in Prestigious Institutions</label>
+                    <select class="form-select"  name="selections">
                         <option>Any</option>
                         <option>0-25</option>
                         <option>25-50</option>
