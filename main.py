@@ -44,14 +44,18 @@ def parent():
 
 
 # --------------------------------------------------- student ------------------------------------------------
+@app.route("/student/success", methods=["GET", "POST"])
+def receive_student_data():
 
-
+    pass
 # ------------------------------------------------- student end-------------------------------------------------
 
 
 # --------------------------------------------------- parent -------------------------------------------------
 
-
+@app.route("/parent/success", methods=["GET", "POST"])
+def receive_parent_data():
+    pass
 # --------------------------------------------------parent end--------------------------------------------------
 
 
@@ -100,7 +104,7 @@ def update_coaching(college_id, table, column, value):
     print("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(college_id) + "')")
     cursor.execute("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`institute_id` = '" + str(college_id) + "')")
     mydb.commit()
-    pass
+
 
 
 # ---------------------------------------------coaching end----------------------------------------------------------

@@ -40,11 +40,11 @@
 
             <div class="col-md-7 col-lg-8">
                 <h4 class="mb-3">Sort Colleges</h4>
-                <form class="needs-validation" novalidate>
+                <form action="{{ url_for('receive_parent_data') }}" method="post" class="needs-validation" novalidate>
 
                     <div class="col-md-4">
                         <label for="fee" class="form-label">Max Fee per semester</label>
-                        <select class="form-select" id="fee">
+                        <select class="form-select" id="fee" name="fee">
                             <option>Any</option>
                             <option>Less than Rs 50K</option>
                             <option>Between 50K to 100K</option>
@@ -53,7 +53,7 @@
                     </div>
                     <div class="col-md-4">
                         <label for="hostel" class="form-label">Hostel Availability</label>
-                        <select class="form-select" id="hostel">
+                        <select class="form-select" id="hostel" name="hostel">
                             <option value="">Optional</option>
                             <option>Mandatory</option>
                         </select>
