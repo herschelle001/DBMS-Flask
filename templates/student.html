@@ -40,7 +40,7 @@
 
             <div class="col-md-7 col-lg-8">
                 <h4 class="mb-3">Sort Colleges</h4>
-                <form action="{{ url_for('sort_colleges') }}" method="post" class="needs-validation" novalidate>
+                <form action="{{ url_for('receive_student_data') }}" method="post" class="needs-validation" novalidate>
 
                     <div class="col-md-4">
                         <label class=form-label">Rank</label>
@@ -107,7 +107,7 @@
                         </select>
                     </div>
 
-                    <button style="margin-top: 10px" id="submit-button" class="w-30 btn btn-lg btn-primary" type="submit">Submit</button>
+                    <button name="submit" value="college" style="margin-top: 10px" id="submit-button" class="w-30 btn btn-lg btn-primary" type="submit">Submit</button>
 
                     <hr class="my-4">
 
@@ -116,7 +116,7 @@
 
             <div class="col-md-7 col-lg-8">
                 <h4 class="mb-3">Sort Entrance Exams</h4>
-                <form action="{{ url_for('sort_entrance_exams') }}" method="post" class="needs-validation" novalidate>
+                <form action="{{ url_for('receive_student_data') }}" method="post" class="needs-validation" novalidate>
 
                     <div class="col-md-4">
                         <label class=form-label">Date (in DD-MM-YYYY format)</label>
@@ -142,7 +142,7 @@
                         </select>
                     </div>
 
-                    <button style="margin-top: 10px" id="submit-button-" class="w-30 btn btn-lg btn-primary" type="submit">Submit</button>
+                    <button name="submit" value="exam" style="margin-top: 10px" id="submit-button-" class="w-30 btn btn-lg btn-primary" type="submit">Submit</button>
 
                     <hr class="my-4">
 
@@ -151,7 +151,7 @@
 
             <div class="col-md-7 col-lg-8">
                 <h4 class="mb-3">Sort Coaching Institutes</h4>
-                <form action="{{ url_for('sort_colleges') }}" method="post" class="needs-validation" novalidate>
+                <form action="{{ url_for('receive_student_data') }}" method="post" class="needs-validation" novalidate>
 
                     <div class="col-md-4">
                         <label class=form-label">Exam</label>
@@ -196,7 +196,7 @@
                         </select>
                     </div>
 
-                    <button style="margin-top: 10px" class="w-30 btn btn-lg btn-primary" type="submit">Submit</button>
+                    <button name="submit" value="coaching" style="margin-top: 10px" class="w-30 btn btn-lg btn-primary" type="submit">Submit</button>
                     <hr class="my-4">
 
                 </form>
