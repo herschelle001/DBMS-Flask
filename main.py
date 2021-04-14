@@ -45,8 +45,19 @@ def parent():
 
 # --------------------------------------------------- student ------------------------------------------------
 @app.route("/student/success", methods=["GET", "POST"])
-def receive_student_data():
+def sort_colleges():
+    fee = request.form["fee"]
+    hostel_avail = request.form["hostel"]
+    state = request.form["state"]
+    package = request.form["pkg"]
+    pass
 
+@app.route("/student/success", methods=["GET", "POST"])
+def sort_entrance_exams():
+    pass
+
+@app.route("/student/success", methods=["GET", "POST"])
+def sort_coaching_institutes():
     pass
 # ------------------------------------------------- student end-------------------------------------------------
 
@@ -54,7 +65,11 @@ def receive_student_data():
 # --------------------------------------------------- parent -------------------------------------------------
 
 @app.route("/parent/success", methods=["GET", "POST"])
-def receive_parent_data():
+def sort_colleges():
+    pass
+
+@app.route("/parent/success", methods=["GET", "POST"])
+def sort_coaching_institutes():
     pass
 # --------------------------------------------------parent end--------------------------------------------------
 
@@ -104,8 +119,6 @@ def update_coaching(college_id, table, column, value):
     print("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(college_id) + "')")
     cursor.execute("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`institute_id` = '" + str(college_id) + "')")
     mydb.commit()
-
-
 
 # ---------------------------------------------coaching end----------------------------------------------------------
 

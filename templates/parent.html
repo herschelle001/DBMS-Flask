@@ -40,7 +40,7 @@
 
             <div class="col-md-7 col-lg-8">
                 <h4 class="mb-3">Sort Colleges</h4>
-                <form action="{{ url_for('receive_parent_data') }}" method="post" class="needs-validation" novalidate>
+                <form action="{{ url_for('sort_colleges') }}" method="post" class="needs-validation" novalidate>
 
                     <div class="col-md-4">
                         <label for="fee" class="form-label">Max Fee per semester</label>
@@ -61,7 +61,7 @@
 
                     <div class="col-md-4">
                         <label for="state" class="form-label">State</label>
-                        <select class="form-select" id="state">
+                        <select class="form-select" id="state" name="state">
                             <option value="">Choose...</option>
                             <option>Andhra Pradesh</option>
                             <option>Arunachal Pradesh</option>
@@ -98,7 +98,7 @@
 
                     <div class="col-md-4">
                         <label for="package" class="form-label">Average package in LPA</label>
-                        <select class="form-select" id="package">
+                        <select class="form-select" id="package" name="pkg">
                             <option value="1">Any</option>
                             <option value="2">Greater than 6 LPA</option>
                             <option value="3">Greater than 10 LPA</option>
@@ -106,7 +106,7 @@
                         </select>
                     </div>
 
-                    <button onclick="func()" style="margin-top: 10px" id="submit-button" class="w-30 btn btn-lg btn-primary" type="submit">Submit</button>
+                    <button style="margin-top: 10px" id="submit-button" class="w-30 btn btn-lg btn-primary" type="submit">Submit</button>
 
                     <hr class="my-4">
 
@@ -116,7 +116,7 @@
 
         <div class="col-md-7 col-lg-8">
             <h4 class="mb-3">Sort Coaching Institutes</h4>
-            <form class="needs-validation" novalidate>
+            <form action="{{ url_for('sort_coaching_institutes') }}" method="post" class="needs-validation" novalidate>
 
                 <div class="col-md-4">
                     <label for="fee" class="form-label">Max Fee per year</label>
