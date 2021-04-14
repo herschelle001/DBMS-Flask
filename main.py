@@ -51,6 +51,7 @@ def sort_colleges():
     interest = request.form["interest"]
     exam = request.form["exam-top"]
     state = request.form["state-top"]
+    return rank+cbse+interest+exam+state
 
 
 @app.route("/student/success", methods=["GET", "POST"])
@@ -58,12 +59,14 @@ def sort_entrance_exams():
     date = request.form["date"]
     mode_of_exam = request.form["mode-of-exam"]
     stream = request.form["stream"]
+    return date+mode_of_exam+stream
 
 
 @app.route("/student/success", methods=["GET", "POST"])
 def sort_coaching_institutes():
     exam = request.form["exam"]
     state = request.form["state"]
+    return exam+state
 
 # ------------------------------------------------- student end-------------------------------------------------
 
@@ -71,19 +74,21 @@ def sort_coaching_institutes():
 # --------------------------------------------------- parent -------------------------------------------------
 
 @app.route("/parent/success", methods=["GET", "POST"])
-def sort_colleges():
+def sort_colleges_parent():
     fee = request.form["fee"]
     hostel_avail = request.form["hostel"]
     state = request.form["state"]
     package = request.form["pkg"]
+    return fee+hostel_avail+state+package
 
 
 @app.route("/parent/success", methods=["GET", "POST"])
-def sort_coaching_institutes():
+def sort_coaching_institutes_parent():
     fee = request.form["fee-bottom"]
     hostel_avail = request.form["hostel-bottom"]
     state = request.form["state-bottom"]
     package = request.form["selections"]
+    return fee+hostel_avail+state+package
 
 # --------------------------------------------------parent end--------------------------------------------------
 
@@ -124,7 +129,6 @@ def receive_coaching_data():
         update_coaching(college_id, 'coaching_institute', 'exams_taught', taught_update)
 
     return "Success"
-
 
 
 def update_coaching(college_id, table, column, value):

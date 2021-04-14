@@ -40,7 +40,7 @@
 
             <div class="col-md-7 col-lg-8">
                 <h4 class="mb-3">Sort Colleges</h4>
-                <form action="{{ url_for('sort_colleges') }}" method="post" class="needs-validation" novalidate>
+                <form action="{{ url_for('sort_colleges_parent') }}" method="post" class="needs-validation" novalidate>
 
                     <div class="col-md-4">
                         <label for="fee" class="form-label">Max Fee per semester</label>
@@ -116,7 +116,7 @@
 
         <div class="col-md-7 col-lg-8">
             <h4 class="mb-3">Sort Coaching Institutes</h4>
-            <form action="{{ url_for('sort_coaching_institutes') }}" method="post" class="needs-validation" novalidate>
+            <form action="{{ url_for('sort_coaching_institutes_parent') }}" method="post" class="needs-validation" novalidate>
 
                 <div class="col-md-4">
                     <label for="fees" class="form-label">Max Fee per year</label>
