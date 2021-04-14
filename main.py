@@ -45,7 +45,7 @@ def parent():
 # --------------------------------------------------- parent -------------------------------------------------
 
 
-# ----------------------------------------------------parent end--------------------------------------------------
+# --------------------------------------------------parent end--------------------------------------------------
 
 
 # --------------------------------------------------- coaching -----------------------------------------------
@@ -82,7 +82,7 @@ def insert(table, columns):
                        3] + "', '" + columns[4] + "', '" + columns[5] + "')")
     mydb.commit()
 
-# -----------------------------------------------coaching end----------------------------------------------------------
+# ---------------------------------------------coaching end----------------------------------------------------------
 
 # --------------------------------------------- college ---------------------------------------------------------------
 
@@ -114,33 +114,29 @@ def receive_college_data():
     fee = request.form["fee"]
     mode_of_admission = request.form["admission"]
 
-    college_general_table = 'college_general'
-    place_stat_table = 'college_placement_stats'
-    col_loc_table = 'college_location'
-
     if not (website == ""):
-        update(college_id, college_general_table, 'college_website', website)
+        update(college_id, 'college_general', 'college_website', website)
 
     if not (placed_students == ""):
-        update(college_id, place_stat_table, 'students_placed_percent', placed_students)
+        update(college_id, 'college_placement_stats', 'students_placed_percent', placed_students)
 
     if not (avg_pkg == ""):
-        update(college_id, place_stat_table, 'avg_package', avg_pkg)
+        update(college_id, 'college_placement_stats', 'avg_package', avg_pkg)
 
     if not (highest_pkg == ""):
-        update(college_id, place_stat_table, 'highest_package', highest_pkg)
+        update(college_id, 'college_placement_stats', 'highest_package', highest_pkg)
 
     if not (fee == ""):
-        update(college_id, college_general_table, 'fees', fee)
+        update(college_id, 'college_general', 'fees', fee)
 
     if not (mode_of_admission == ""):
-        update(college_id, college_general_table, 'mode_of_admission', mode_of_admission)
+        update(college_id, 'college_general', 'mode_of_admission', mode_of_admission)
 
     if not (name == ""):
-        update(college_id, college_general_table, 'full_name', name)
+        update(college_id, 'college_general', 'full_name', name)
 
     if not (area == ""):
-        update(college_id, col_loc_table, 'area_in_acres', area)
+        update(college_id, 'college_location', 'area_in_acres', area)
 
     return "Success"
 
