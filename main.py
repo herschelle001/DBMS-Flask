@@ -46,19 +46,25 @@ def parent():
 # --------------------------------------------------- student ------------------------------------------------
 @app.route("/student/success", methods=["GET", "POST"])
 def sort_colleges():
-    fee = request.form["fee"]
-    hostel_avail = request.form["hostel"]
-    state = request.form["state"]
-    package = request.form["pkg"]
-    pass
+    rank = request.form["rank"]
+    cbse = request.form["cbse-percent"]
+    interest = request.form["interest"]
+    exam = request.form["exam-top"]
+    state = request.form["state-top"]
+
 
 @app.route("/student/success", methods=["GET", "POST"])
 def sort_entrance_exams():
-    pass
+    date = request.form["date"]
+    mode_of_exam = request.form["mode-of-exam"]
+    stream = request.form["stream"]
+
 
 @app.route("/student/success", methods=["GET", "POST"])
 def sort_coaching_institutes():
-    pass
+    exam = request.form["exam"]
+    state = request.form["state"]
+
 # ------------------------------------------------- student end-------------------------------------------------
 
 
@@ -66,17 +72,23 @@ def sort_coaching_institutes():
 
 @app.route("/parent/success", methods=["GET", "POST"])
 def sort_colleges():
-    pass
+    fee = request.form["fee"]
+    hostel_avail = request.form["hostel"]
+    state = request.form["state"]
+    package = request.form["pkg"]
+
 
 @app.route("/parent/success", methods=["GET", "POST"])
 def sort_coaching_institutes():
-    pass
+    fee = request.form["fee-bottom"]
+    hostel_avail = request.form["hostel-bottom"]
+    state = request.form["state-bottom"]
+    package = request.form["selections"]
+
 # --------------------------------------------------parent end--------------------------------------------------
 
 
 # --------------------------------------------------- coaching -----------------------------------------------
-
-
 
 query = "SELECT * from coaching_institute"
 cursor.execute(query)

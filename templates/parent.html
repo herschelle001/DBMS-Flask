@@ -119,8 +119,8 @@
             <form action="{{ url_for('sort_coaching_institutes') }}" method="post" class="needs-validation" novalidate>
 
                 <div class="col-md-4">
-                    <label for="fee" class="form-label">Max Fee per year</label>
-                    <select class="form-select" id="fees">
+                    <label for="fees" class="form-label">Max Fee per year</label>
+                    <select class="form-select" id="fees" name="fee-bottom">
                         <option>Any</option>
                         <option>Less than Rs 50K</option>
                         <option>Between 50K to 100K</option>
@@ -130,7 +130,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="hostel" class="form-label">Hostel Availability</label>
-                    <select class="form-select" id="hostels">
+                    <select class="form-select" id="hostels" name="hostel-bottom">
                         <option value="">Optional</option>
                         <option>Mandatory</option>
                     </select>
@@ -138,7 +138,7 @@
 
                 <div class="col-md-4">
                     <label for="state" class="form-label">State</label>
-                    <select class="form-select" id="states">
+                    <select class="form-select" id="states" name="state-bottom">
                         <option value="">Choose...</option>
                         <option>Andhra Pradesh</option>
                         <option>Arunachal Pradesh</option>
@@ -174,8 +174,8 @@
                 </div>
 
                 <div class="col-md-4">
-                    <label for="package" class="form-label">Number of Students Selected in Prestigious Institutions</label>
-                    <select class="form-select" id="packages">
+                    <label for="packages" class="form-label">Number of Students Selected in Prestigious Institutions</label>
+                    <select class="form-select" id="packages" name="selections">
                         <option>Any</option>
                         <option>0-25</option>
                         <option>25-50</option>

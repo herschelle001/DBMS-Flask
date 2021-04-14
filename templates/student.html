@@ -43,29 +43,17 @@
                 <form action="{{ url_for('sort_colleges') }}" method="post" class="needs-validation" novalidate>
 
                     <div class="col-md-4">
-                        <label for="rank" class=form-label">Rank</label>
-                        <input class="form-control" id="rank">
+                        <label class=form-label">Rank</label>
+                        <input class="form-control" name="rank">
                     </div>
                     <div class="col-md-4">
-                        <label for="cbse-percent" class=form-label">CBSE %</label>
-                        <input class="form-control" id="cbse-percent">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="rating" class="form-label">Filter by Rating</label>
-                        <select class="form-select" id="rating">
-                            <option value="">Choose...</option>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
+                        <label class=form-label">CBSE %</label>
+                        <input class="form-control" name="cbse-percent">
                     </div>
 
                     <div class="col-md-4">
-                        <label for="interest" class="form-label">Filter by your Interest</label>
-                        <select class="form-select" id="interest">
+                        <label class="form-label">Filter by your Interest</label>
+                        <select class="form-select" name="interest">
                             <option value="">Choose...</option>
                             <option>CSE</option>
                             <option>IT</option>
@@ -74,8 +62,8 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label for="exam" class="form-label">Filter by Entrance Exam</label>
-                        <select class="form-select" id="exam">
+                        <label class="form-label">Filter by Entrance Exam</label>
+                        <select class="form-select" name="exam-top">
                             <option value="">Choose...</option>
                             <option>JEE Mains</option>
                             <option>JEE Advanced</option>
@@ -83,8 +71,8 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label for="state" class="form-label">State</label>
-                        <select class="form-select" id="state">
+                        <label class="form-label">State</label>
+                        <select class="form-select" name="state-top">
                             <option value="">Choose...</option>
                             <option>Andhra Pradesh</option>
                             <option>Arunachal Pradesh</option>
@@ -117,12 +105,9 @@
                             <option>Uttarakhand </option>
                             <option>West Bengal</option>
                         </select>
-                        <!--                            <div class="invalid-feedback">-->
-                        <!--                                Please provide a valid state.-->
-                        <!--                            </div>-->
                     </div>
 
-                    <button onclick="func()" style="margin-top: 10px" id="submit-button" class="w-30 btn btn-lg btn-primary" type="submit">Submit</button>
+                    <button style="margin-top: 10px" id="submit-button" class="w-30 btn btn-lg btn-primary" type="submit">Submit</button>
 
                     <hr class="my-4">
 
@@ -134,13 +119,13 @@
                 <form action="{{ url_for('sort_entrance_exams') }}" method="post" class="needs-validation" novalidate>
 
                     <div class="col-md-4">
-                        <label for="rank" class=form-label">Date (in DD-MM-YYYY format)</label>
-                        <input class="form-control" id="rank-u">
+                        <label class=form-label">Date (in DD-MM-YYYY format)</label>
+                        <input class="form-control" name="date">
                     </div>
 
                     <div class="col-md-4">
-                        <label for="interest" class="form-label">Mode of Exam</label>
-                        <select class="form-select" id="interest-">
+                        <label class="form-label">Mode of Exam</label>
+                        <select class="form-select" name="mode-of-exam">
                             <option value="">Choose...</option>
                             <option>Online</option>
                             <option>Offline</option>
@@ -148,15 +133,14 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label for="interest" class="form-label">Stream</label>
-                        <select class="form-select" id="interest-m">
+                        <label class="form-label">Stream</label>
+                        <select class="form-select" name="stream">
                             <option value="">Choose...</option>
                             <option>Engineering</option>
                             <option>Medical</option>
                             <option>Boards</option>
                         </select>
                     </div>
-
 
                     <button style="margin-top: 10px" id="submit-button-" class="w-30 btn btn-lg btn-primary" type="submit">Submit</button>
 
@@ -170,25 +154,14 @@
                 <form action="{{ url_for('sort_coaching') }}" method="post" class="needs-validation" novalidate>
 
                     <div class="col-md-4">
-                        <label for="rank" class=form-label">Exam</label>
-                        <input class="form-control" id="randsvk">
+                        <label class=form-label">Exam</label>
+                        <input class="form-control" name="exam">
                     </div>
 
-                    <div class="col-md-4">
-                        <label for="interest" class="form-label">Filter by Rating</label>
-                        <select class="form-select" id="interestvsd">
-                            <option value="">Choose...</option>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                    </div>
 
                     <div class="col-md-4">
-                        <label for="state" class="form-label">State</label>
-                        <select class="form-select" id="statedaw">
+                        <label class="form-label">State</label>
+                        <select class="form-select" name="state">
                             <option value="">Choose...</option>
                             <option>Andhra Pradesh</option>
                             <option>Arunachal Pradesh</option>
@@ -221,13 +194,9 @@
                             <option>Uttarakhand </option>
                             <option>West Bengal</option>
                         </select>
-                        <!--                            <div class="invalid-feedback">-->
-                        <!--                                Please provide a valid state.-->
-                        <!--                            </div>-->
                     </div>
 
-                    <button style="margin-top: 10px" id="submit-buttondaw" class="w-30 btn btn-lg btn-primary" type="submit">Submit</button>
-
+                    <button style="margin-top: 10px" class="w-30 btn btn-lg btn-primary" type="submit">Submit</button>
                     <hr class="my-4">
 
                 </form>
@@ -251,6 +220,5 @@
 
 <script src="https://getbootstrap.com/docs/5.0/examples/checkout/form-validation.js"></script>
 
-<script src="../backend/student.js"></script>
 </body>
 </html>
