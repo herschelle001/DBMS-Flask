@@ -13,12 +13,12 @@
 
 
     <!-- Custom styles for this template -->
-    <link href="../static/styles.css" rel="stylesheet">
+    <link href="../static/index.css" rel="stylesheet">
 </head>
 
 <body class="text-center">
 
-    <form class="form-signin">
+    <form action="{{ url_for('receive_index_data') }}" method="post" class="form-signin">
         <img class="mb-4" src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="72"
              height="57">
         <h1 class="h3 mb-3 fw-normal">Welcome</h1>
@@ -27,17 +27,18 @@
         <input type="text" id="name" class="form-control" placeholder="Name" required autofocus>
 
         <label for="dropDown" class="visually-hidden">DropDown</label>
-        <select id="dropDown" class="form-select" required autofocus>
+        <select id="dropDown" class="form-select" name="selected" required autofocus>
             <option>Enter As...</option>
             <option>Student</option>
             <option>Parent</option>
-            <option>Professor</option>
             <option>College Admin</option>
             <option>Coaching Institute</option>
         </select>
-        <button onclick="func()" class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
 
     </form>
+
+<script src="../static/index.js"></script>
 
 </body>
 </html>

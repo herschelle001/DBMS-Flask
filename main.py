@@ -27,7 +27,7 @@ def coaching():
     return render_template("coaching.html", coaching_names=coaching_names)
 
 
-@app.route("/student")
+@app.route("/student", methods=["GET", "POST"])
 def student():
     return render_template("student.html")
 
@@ -35,6 +35,13 @@ def student():
 @app.route("/parent")
 def parent():
     return render_template("parent.html")
+
+
+# --------------------------------------------------- index.html ------------------------------------------------
+
+
+# ------------------------------------------------- index.html end-------------------------------------------------
+
 
 # --------------------------------------------------- student ------------------------------------------------
 
