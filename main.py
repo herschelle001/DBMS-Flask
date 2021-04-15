@@ -55,7 +55,7 @@ def receive_student_data():
         # query here
         return rank+cbse+interest+exam+state
 
-    elif request.form['submit'] == 'college':  # for middle section
+    elif request.form['submit'] == 'exam':  # for middle section
         date = request.form["date"]
         mode_of_exam = request.form["mode-of-exam"]
         stream = request.form["stream"]
@@ -101,8 +101,8 @@ query = "SELECT * from coaching_institute"
 cursor.execute(query)
 result = cursor.fetchall()
 coaching_names = []
-for i in result:
-    coaching_names.append(i[1])
+for j in result:
+    coaching_names.append(j[1])
 
 @app.route("/coaching/success", methods=["GET", "POST"])
 def receive_coaching_data():
@@ -147,8 +147,8 @@ query = "SELECT * from college_general"
 cursor.execute(query)
 result = cursor.fetchall()
 college_names = []
-for i in result:
-    college_names.append(i[2])
+for j in result:
+    college_names.append(j[2])
 
 
 @app.route("/college/success", methods=["GET", "POST"])
