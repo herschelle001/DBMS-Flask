@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import mysql.connector
 
 app = Flask(__name__)
@@ -39,6 +39,18 @@ def parent():
 
 # --------------------------------------------------- index.html ------------------------------------------------
 
+@app.route("/", methods=["GET", "POST"])
+def receive_index_data():
+    selected = request.form["selected"]
+    if selected == "Student":
+        selected = "student"
+    elif selected == "Parent":
+        selected = "parent"
+    elif selected == "College Admin":
+        selected = "college"
+    elif selected == "Coaching Institute":
+        selected = "coaching"
+    return redirect("/"+selected)
 
 # ------------------------------------------------- index.html end-------------------------------------------------
 
