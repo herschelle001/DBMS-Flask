@@ -119,8 +119,22 @@
                 <form action="{{ url_for('receive_student_data') }}" method="post" class="needs-validation" novalidate>
 
                     <div class="col-md-4">
-                        <label class=form-label">Date (in DD-MM-YYYY format)</label>
-                        <input class="form-control" name="date">
+                        <label class=form-label">Month of exam</label>
+                        <select class="form-select" name="choose_month">
+                            <option value="">Choose...</option>
+                            <option>January</option>
+                            <option>February</option>
+                            <option>March</option>
+                            <option>April</option>
+                            <option>May</option>
+                            <option>June</option>
+                            <option>July</option>
+                            <option>August</option>
+                            <option>September</option>
+                            <option>October</option>
+                            <option>November</option>
+                            <option>December</option>
+                        </select>
                     </div>
 
                     <div class="col-md-4">
@@ -133,12 +147,15 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">Stream</label>
-                        <select class="form-select" name="stream">
+                        <label class="form-label">Exam name</label>
+                        <select class="form-select" name="exam_name">
                             <option value="">Choose...</option>
-                            <option>Engineering</option>
-                            <option>Medical</option>
-                            <option>Boards</option>
+                            <option>Jee Main</option>
+                            <option>Jee Advanced</option>
+                            <option>Bitsat</option>
+                            <option>NDA</option>
+                            <option>VITEEE</option>
+                            <option>UPSEE</option>
                         </select>
                     </div>
 
