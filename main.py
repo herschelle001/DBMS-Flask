@@ -19,12 +19,12 @@ def main_page():
 
 @app.route("/college")
 def college():
-    return render_template("college.html", college_names=college_names)
+    return render_template("college.html", college_names = college_names)
 
 
 @app.route("/coaching")
 def coaching():
-    return render_template("coaching.html", coaching_names=coaching_names)
+    return render_template("coaching.html", coaching_names = coaching_names)
 
 
 @app.route("/student", methods=["GET", "POST"])
@@ -64,17 +64,13 @@ def receive_student_data():
         interest = request.form["interest"]
         exam = request.form["exam-top"]
         state = request.form["state-top"]
-        society = ""
-        # query here
-        return rank+cbse+interest+exam+state
+        res = student_college(rank, interest, state, cbse, exam)
+        return f'{res}'
 
     elif request.form['submit'] == 'exam':  # for middle section
         month_of_exam = request.form["choose_month"]
         mode_of_exam = request.form["mode-of-exam"]
         name_of_exam = request.form["exam_name"]
-
-        month_res = []
-        exam_res = []
 
         if not (month_of_exam == "") and not (mode_of_exam == ""):
             month_res = execute1('entrance_exams', month_of_exam)
@@ -114,6 +110,25 @@ def receive_student_data():
             execute6( 'coaching_institute', 'state','exam_to_prepare')
         return "Success"
 
+def student_college(rank, interest, state, cbse, exam):
+    print("SELECT * FROM `college_general` LEFT OUTER JOIN college_admission_criteria ON"
+    "(college_general.college_id = college_admission_criteria.college_id) LEFT OUTER JOIN college_course ON"
+    "(college_general.college_id = college_course.college_id) LEFT OUTER JOIN college_location ON"
+    "(college_location.college_id = college_general.college_id) LEFT OUTER JOIN location ON"
+    "(location.location_id = college_location.location_id) " +
+    "WHERE (end_rank > '" + rank + "') and (course_name = '" + interest + "') "
+    "and (state = '" + state + "') and (cutoff_in_boards < '" + cbse + "') and (mode_of_admission = '" + exam + "')")
+
+    cursor.execute("SELECT `full_name` FROM `college_general` LEFT OUTER JOIN `college_admission_criteria` ON"
+    "(college_general.college_id = college_admission_criteria.college_id) LEFT OUTER JOIN college_course ON"
+    "(college_general.college_id = college_course.college_id) LEFT OUTER JOIN college_location ON"
+    "(college_location.college_id = college_general.college_id) LEFT OUTER JOIN location ON"
+    "(location.location_id = college_location.location_id) "
+    "WHERE (end_rank >= '" + rank + "') and (course_name = '" + interest + "') "
+    "and (state = '" + state + "') and (cutoff_in_boards < '" + cbse + "') and (mode_of_admission = '" + exam + "')")
+
+    res = cursor.fetchall()
+    return res
 
 def execute1( table, value):
     print("SELECT * FROM `" + table + "' WHERE (`exam_month` = '" + str(value) + "')")
@@ -140,28 +155,31 @@ def execute4( table, value):
     " (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON"
     " (location.location_id = coaching_institute.location_id) "
     " WHERE (`entrance_exams`.`exam_name` = '" + str(value) + "')")
+
     cursor.execute("SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON"
     " (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON"
     " (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON"
     " (location.location_id = coaching_institute.location_id) "
     " WHERE (`entrance_exams`.`exam_name` = '" + str(value) + "')")
-    res=cursor.fetchall()
+
+    res = cursor.fetchall()
     for i in res:
         print(i)
 
 def execute5( table, value):
     print(
-        "SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON"
-        " (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON"
+        "SELECT * FROM `" + table + "` LEFT OUTER JOIN coaching_institute_exam ON"
+        " (coaching_institute_exam.institute_id = coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON"
         " (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON"
         " (location.location_id = coaching_institute.location_id) "
         " WHERE (`location`.`state` = '" + str(value) + "')")
+
     cursor.execute(
-        "SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON"
+        "SELECT * FROM `" + table + "` LEFT OUTER JOIN coaching_institute_exam ON"
         " (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON"
         " (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON"
-        " (location.location_id = coaching_institute.location_id) "
-        " WHERE (`location`.`state` = '" + str(value) + "')")
+        " (location.location_id = coaching_institute.location_id) ")
+
     res = cursor.fetchall()
     for i in res:
         print(i)
@@ -240,6 +258,7 @@ def func(fee, hostel, state, package):
                    "(`college_location`.`college_id` = `college_general`.`college_id`) LEFT OUTER JOIN location ON "
                    "(`location`.`location_id` = `college_location`.`location_id`) WHERE "
                    "(`fees` < '" + fee + "') and (`avg_package` > '" + package + "') and (`state` = '" + state + "')")
+
     res = cursor.fetchall()
     return res
 
@@ -256,6 +275,7 @@ def func2(fee, hostel, package):
                    "(`college_location`.`college_id` = `college_general`.`college_id`) LEFT OUTER JOIN location ON "
                    "(`location`.`location_id` = `college_location`.`location_id`) WHERE "
                    "(`fees` < '" + fee + "') and (`avg_package` > '" + package + "')")
+
     res = cursor.fetchall()
     return res
 
