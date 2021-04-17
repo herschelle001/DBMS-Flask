@@ -210,7 +210,6 @@ def receive_college_data():
             break
 
     name = request.form["name"]
-    hostelAvailability = request.form["hostel"]
     website = request.form["website"]
     placed_students = request.form["placed"]
     avg_pkg = request.form["avg"]
