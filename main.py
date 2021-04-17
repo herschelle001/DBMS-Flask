@@ -39,23 +39,6 @@ def parent():
 
 # --------------------------------------------------- index.html ------------------------------------------------
 
-@app.route("/", methods=["GET", "POST"])
-def receive_index_data():
-    selected = request.form["selected"]
-    if selected == "Student":
-        selected = "student"
-    elif selected == "Parent":
-        selected = "parent"
-    elif selected == "College Admin":
-        selected = "college"
-    elif selected == "Coaching Institute":
-        selected = "coaching"
-    return redirect("/"+selected)
-
-# ------------------------------------------------- index.html end-------------------------------------------------
-
-
-# --------------------------------------------------- student ------------------------------------------------
 @app.route("/student/success", methods=["GET", "POST"])
 def receive_student_data():
     if request.form['submit'] == 'college':  # for top section
@@ -72,132 +55,51 @@ def receive_student_data():
         mode_of_exam = request.form["mode-of-exam"]
         name_of_exam = request.form["exam_name"]
 
+        arr = []
+
         if not (month_of_exam == "") and not (mode_of_exam == ""):
             month_res = execute1('entrance_exams', month_of_exam)
             exam_res = execute2('entrance_exams', mode_of_exam)
             for i in month_res:
                 for j in exam_res:
                     if i == j:
-                        print(i)
+                        arr.append(i)
 
         elif not (month_of_exam == "") and (mode_of_exam == ""):
             month_res = execute1('entrance_exams', month_of_exam)
             for i in month_res:
-                print(i)
+                arr.append(i)
 
         elif (mode_of_exam == "") and not (mode_of_exam == ""):
             exam_res = execute2('entrance_exams', mode_of_exam)
             for i in exam_res:
-                print(i)
+                arr.append(i)
 
         if not (name_of_exam == ""):
-            execute3( 'entrance_exams', name_of_exam)
+            res = execute3( 'entrance_exams', name_of_exam)
+            return f'{res}'
 
-        return "Success"
+        return f'{arr}'
 
     else: # for bottom section
         exam_to_prepare = request.form["exam_name"]
-        state = request.form["state"]
-        # query here
+        state = request.form["state"]\
+
         # if only exam name is selected
         if not (exam_to_prepare == "") and (state == ""):
-            execute4('coaching_institute', 'exam_to_prepare')
+            res = execute4('coaching_institute', 'exam_to_prepare')
+            return f'{res}'
+
         # if only state is selected
         elif not (state == "") and (exam_to_prepare == ""):
-            execute5( 'coaching_institute', 'state')
+            res = execute5('coaching_institute')
+            return f'{res}'
+
         # if both are selected
         elif not (state == "") and not (exam_to_prepare == ""):
-            execute6( 'coaching_institute', 'state','exam_to_prepare')
-        return "Success"
+            res = execute6( 'coaching_institute', 'state','exam_to_prepare')
+            return f'{res}'
 
-def student_college(rank, interest, state, cbse, exam):
-    print("SELECT * FROM `college_general` LEFT OUTER JOIN college_admission_criteria ON"
-    "(college_general.college_id = college_admission_criteria.college_id) LEFT OUTER JOIN college_course ON"
-    "(college_general.college_id = college_course.college_id) LEFT OUTER JOIN college_location ON"
-    "(college_location.college_id = college_general.college_id) LEFT OUTER JOIN location ON"
-    "(location.location_id = college_location.location_id) " +
-    "WHERE (end_rank > '" + rank + "') and (course_name = '" + interest + "') "
-    "and (state = '" + state + "') and (cutoff_in_boards < '" + cbse + "') and (mode_of_admission = '" + exam + "')")
-
-    cursor.execute("SELECT `full_name` FROM `college_general` LEFT OUTER JOIN `college_admission_criteria` ON"
-    "(college_general.college_id = college_admission_criteria.college_id) LEFT OUTER JOIN college_course ON"
-    "(college_general.college_id = college_course.college_id) LEFT OUTER JOIN college_location ON"
-    "(college_location.college_id = college_general.college_id) LEFT OUTER JOIN location ON"
-    "(location.location_id = college_location.location_id) "
-    "WHERE (end_rank >= '" + rank + "') and (course_name = '" + interest + "') "
-    "and (state = '" + state + "') and (cutoff_in_boards < '" + cbse + "') and (mode_of_admission = '" + exam + "')")
-
-    res = cursor.fetchall()
-    return res
-
-def execute1( table, value):
-    print("SELECT * FROM `" + table + "' WHERE (`exam_month` = '" + str(value) + "')")
-    cursor.execute("SELECT * FROM `" + table + "` WHERE (`exam_month` = '" + str(value) + "')")
-    res = cursor.fetchall()
-    return res
-
-def execute2( table, value):
-    print("SELECT * FROM `" + table + "' WHERE (`mode_of_exam` = '" + str(value) + "')")
-    cursor.execute("SELECT * FROM `" + table + "` WHERE (`mode_of_exam` = '" + str(value) + "')")
-    res = cursor.fetchall()
-    return res
-
-def execute3( table, value):
-    print("SELECT * FROM `" + table + "' WHERE (`exam_name` = '" + str(value) + "')")
-    cursor.execute("SELECT * FROM `" + table + "` WHERE (`exam_name` = '" + str(value) + "')")
-    res = cursor.fetchall()
-    for i in res:
-        print(i)
-
-def execute4( table, value):
-    print("SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON"
-    " (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON"
-    " (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON"
-    " (location.location_id = coaching_institute.location_id) "
-    " WHERE (`entrance_exams`.`exam_name` = '" + str(value) + "')")
-
-    cursor.execute("SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON"
-    " (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON"
-    " (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON"
-    " (location.location_id = coaching_institute.location_id) "
-    " WHERE (`entrance_exams`.`exam_name` = '" + str(value) + "')")
-
-    res = cursor.fetchall()
-    for i in res:
-        print(i)
-
-def execute5( table, value):
-    print(
-        "SELECT * FROM `" + table + "` LEFT OUTER JOIN coaching_institute_exam ON"
-        " (coaching_institute_exam.institute_id = coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON"
-        " (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON"
-        " (location.location_id = coaching_institute.location_id) "
-        " WHERE (`location`.`state` = '" + str(value) + "')")
-
-    cursor.execute(
-        "SELECT * FROM `" + table + "` LEFT OUTER JOIN coaching_institute_exam ON"
-        " (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON"
-        " (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON"
-        " (location.location_id = coaching_institute.location_id) ")
-
-    res = cursor.fetchall()
-    for i in res:
-        print(i)
-
-def execute6( table, values, valuee):
-
-    print(
-        "SELECT * FROM `" + table + "` LEFT OUTER JOIN coaching_institute_exam ON"
-        " (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON"
-        " (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON"
-        " (location.location_id = coaching_institute.location_id) "
-        " WHERE (`entrance_exams`.`exam_name` = '" + str(valuee) + "') "
-        " AND (`location`.`state` = '" + str(values) + "')")
-    cursor.execute(
-        "SELECT * FROM `" + table + "` LEFT OUTER JOIN coaching_institute_exam ON (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON (location.location_id = coaching_institute.location_id) WHERE (`entrance_exams`.`exam_name` = '" + str(valuee) + "') AND (`location`.`state` = '" + str(values) + "')")
-    res = cursor.fetchall()
-    for i in res:
-        print(i)
 # ------------------------------------------------- student end-------------------------------------------------
 
 
@@ -230,9 +132,9 @@ def receive_parent_data():
             package = '15'
 
         if state == 'Any':
-            res = func2(fee, hostel_avail, package)
+            res = get_parent_data2(fee, hostel_avail, package)
         else:
-            res = func(fee, hostel_avail, state, package)
+            res = get_parent_data1(fee, hostel_avail, state, package)
 
         return f'{res}'
 
@@ -243,41 +145,6 @@ def receive_parent_data():
         package = request.form["selections"]
         # query here
         return fee + hostel_avail + state + package
-
-def func(fee, hostel, state, package):
-    print(("Select `full_name` from `college_general` LEFT OUTER JOIN `college_placement_stats` ON "
-                   "(`college_placement_stats`.`college_id` = `college_general`.`college_id`) "
-                   "LEFT OUTER JOIN college_location ON "
-                   "(`college_location`.`college_id` = `college_general`.`college_id`) LEFT OUTER JOIN location ON "
-                   "(`location`.`location_id` = `college_location`.`location_id`) WHERE "
-                   "(`fees` < '" + fee + "') and (`avg_package` > '" + package + "') and (`state` = '" + state + "')"))
-
-    cursor.execute("Select `full_name` from `college_general` LEFT OUTER JOIN `college_placement_stats` ON "
-                   "(`college_placement_stats`.`college_id` = `college_general`.`college_id`) "
-                   "LEFT OUTER JOIN college_location ON "
-                   "(`college_location`.`college_id` = `college_general`.`college_id`) LEFT OUTER JOIN location ON "
-                   "(`location`.`location_id` = `college_location`.`location_id`) WHERE "
-                   "(`fees` < '" + fee + "') and (`avg_package` > '" + package + "') and (`state` = '" + state + "')")
-
-    res = cursor.fetchall()
-    return res
-
-def func2(fee, hostel, package):
-    print("Select `full_name` from `college_general` LEFT OUTER JOIN `college_placement_stats` ON "
-                   "(`college_placement_stats`.`college_id` = `college_general`.`college_id`) "
-                   "LEFT OUTER JOIN college_location ON "
-                   "(`college_location`.`college_id` = `college_general`.`college_id`) LEFT OUTER JOIN location ON "
-                   "(`location`.`location_id` = `college_location`.`location_id`) WHERE "
-                   "(`fees` < '" + fee + "') and (`avg_package` > '" + package + "')")
-    cursor.execute("Select `full_name` from `college_general` LEFT OUTER JOIN `college_placement_stats` ON "
-                   "(`college_placement_stats`.`college_id` = `college_general`.`college_id`) "
-                   "LEFT OUTER JOIN college_location ON "
-                   "(`college_location`.`college_id` = `college_general`.`college_id`) LEFT OUTER JOIN location ON "
-                   "(`location`.`location_id` = `college_location`.`location_id`) WHERE "
-                   "(`fees` < '" + fee + "') and (`avg_package` > '" + package + "')")
-
-    res = cursor.fetchall()
-    return res
 
 # --------------------------------------------------parent end--------------------------------------------------
 
@@ -306,24 +173,19 @@ def receive_coaching_data():
     hostel_avail_update = request.form["hostel-update"]
 
     if not (name_update == ""):
-        update_coaching(college_id, 'coaching_institute', 'institute_name', name_update)
+        update_coaching_data(college_id, 'coaching_institute', 'institute_name', name_update)
 
     if not (fee_update == ""):
-        update_coaching(college_id, 'coaching_institute', 'fees', fee_update)
+        update_coaching_data(college_id, 'coaching_institute', 'fees', fee_update)
 
     if not (hostel_avail_update == ""):
-        update_coaching(college_id, 'coaching_institute', 'hostel_availability', hostel_avail_update)
+        update_coaching_data(college_id, 'coaching_institute', 'hostel_availability', hostel_avail_update)
 
     if not (taught_update == ""):
-        update_coaching(college_id, 'coaching_institute', 'exams_taught', taught_update)
+        update_coaching_data(college_id, 'coaching_institute', 'exams_taught', taught_update)
 
     return "Success"
 
-
-def update_coaching(college_id, table, column, value):
-    print("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(college_id) + "')")
-    cursor.execute("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`institute_id` = '" + str(college_id) + "')")
-    mydb.commit()
 
 # ---------------------------------------------coaching end----------------------------------------------------------
 
@@ -358,42 +220,121 @@ def receive_college_data():
     mode_of_admission = request.form["admission"]
 
     if not (website == ""):
-        update(college_id, 'college_general', 'college_website', website)
+        update_college_data(college_id, 'college_general', 'college_website', website)
 
     if not (placed_students == ""):
-        update(college_id, 'college_placement_stats', 'students_placed_percent', placed_students)
+        update_college_data(college_id, 'college_placement_stats', 'students_placed_percent', placed_students)
 
     if not (avg_pkg == ""):
-        update(college_id, 'college_placement_stats', 'avg_package', avg_pkg)
+        update_college_data(college_id, 'college_placement_stats', 'avg_package', avg_pkg)
 
     if not (highest_pkg == ""):
-        update(college_id, 'college_placement_stats', 'highest_package', highest_pkg)
+        update_college_data(college_id, 'college_placement_stats', 'highest_package', highest_pkg)
 
     if not (fee == ""):
-        update(college_id, 'college_general', 'fees', fee)
+        update_college_data(college_id, 'college_general', 'fees', fee)
 
     if not (mode_of_admission == ""):
-        update(college_id, 'college_general', 'mode_of_admission', mode_of_admission)
+        update_college_data(college_id, 'college_general', 'mode_of_admission', mode_of_admission)
 
     if not (name == ""):
-        update(college_id, 'college_general', 'full_name', name)
+        update_college_data(college_id, 'college_general', 'full_name', name)
 
     if not (area == ""):
-        update(college_id, 'college_location', 'area_in_acres', area)
+        update_college_data(college_id, 'college_location', 'area_in_acres', area)
 
     return "Success"
 
 
-def update(college_id, table, column, value):
-    print("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(college_id) + "')")
+# ------------------------------------------------ college end---------------------------------------------------------
+
+# ------------------------------------------------ Queries ------------------------------------------------------------
+
+    # ----- Student ------
+
+def student_college(rank, interest, state, cbse, exam):
+    cursor.execute("SELECT `full_name` FROM `college_general` LEFT OUTER JOIN `college_admission_criteria` ON (college_general.college_id = college_admission_criteria.college_id) LEFT OUTER JOIN college_course ON (college_general.college_id = college_course.college_id) LEFT OUTER JOIN college_location ON (college_location.college_id = college_general.college_id) LEFT OUTER JOIN location ON (location.location_id = college_location.location_id) WHERE (end_rank >= '" + rank + "') and (course_name = '" + interest + "') and (state = '" + state + "') and (cutoff_in_boards < '" + cbse + "') and (mode_of_admission = '" + exam + "')")
+    res = cursor.fetchall()
+    return res
+
+def execute1(table, value):
+    cursor.execute("SELECT * FROM `" + table + "` WHERE (`exam_month` = '" + str(value) + "')")
+    res = cursor.fetchall()
+    return res
+
+def execute2(table, value):
+    cursor.execute("SELECT * FROM `" + table + "` WHERE (`mode_of_exam` = '" + str(value) + "')")
+    res = cursor.fetchall()
+    return res
+
+def execute3(table, value):
+    cursor.execute("SELECT * FROM `" + table + "` WHERE (`exam_name` = '" + str(value) + "')")
+    res = cursor.fetchall()
+    return res
+
+def execute4(table, value):
+    cursor.execute("SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON (location.location_id = coaching_institute.location_id) WHERE (`entrance_exams`.`exam_name` = '" + str(value) + "')")
+    res = cursor.fetchall()
+    return res
+
+def execute5(table):
+    cursor.execute("SELECT * FROM `" + table + "` LEFT OUTER JOIN coaching_institute_exam ON (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON (location.location_id = coaching_institute.location_id) ")
+    res = cursor.fetchall()
+    return res
+
+def execute6(table, values, valuee):
+    cursor.execute("SELECT * FROM `" + table + "` LEFT OUTER JOIN coaching_institute_exam ON (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON (location.location_id = coaching_institute.location_id) WHERE (`entrance_exams`.`exam_name` = '" + str(valuee) + "') AND (`location`.`state` = '" + str(values) + "')")
+    res = cursor.fetchall()
+    return res
+
+    # ----- Student ------
+
+    # ----- Parent ------
+
+def get_parent_data1(fee, hostel, state, package):
+    cursor.execute("Select `full_name` from `college_general` LEFT OUTER JOIN `college_placement_stats` ON (`college_placement_stats`.`college_id` = `college_general`.`college_id`) LEFT OUTER JOIN college_location ON (`college_location`.`college_id` = `college_general`.`college_id`) LEFT OUTER JOIN location ON (`location`.`location_id` = `college_location`.`location_id`) WHERE (`fees` < '" + fee + "') and (`avg_package` > '" + package + "') and (`state` = '" + state + "')")
+    res = cursor.fetchall()
+    return res
+
+def get_parent_data2(fee, hostel, package):
+    cursor.execute("Select `full_name` from `college_general` LEFT OUTER JOIN `college_placement_stats` ON (`college_placement_stats`.`college_id` = `college_general`.`college_id`) LEFT OUTER JOIN college_location ON (`college_location`.`college_id` = `college_general`.`college_id`) LEFT OUTER JOIN location ON (`location`.`location_id` = `college_location`.`location_id`) WHERE (`fees` < '" + fee + "') and (`avg_package` > '" + package + "')")
+    res = cursor.fetchall()
+    return res
+
+    # ----- Parent ------
+
+    # ----- Coaching ------
+
+def update_coaching_data(college_id, table, column, value):
+    cursor.execute("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`institute_id` = '" + str(college_id) + "')")
+    mydb.commit()
+
+    # ----- Coaching ------
+
+    # ----- College ------
+
+def update_college_data(college_id, table, column, value):
     cursor.execute("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(college_id) + "')")
     mydb.commit()
 
-# ------------------------------------------------college end---------------------------------------------------------
-
+    # ----- College ------
+# ----------------------------------------------- Queries End ---------------------------------------------------------
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
