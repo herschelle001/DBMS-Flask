@@ -11,11 +11,13 @@ mydb = mysql.connector.connect(
 )
 cursor = mydb.cursor()
 
+
 # ----------------------------------------------- routes ---------------------------------------------------------
 
 @app.route("/")
 def main_page():
     return render_template("index.html")
+
 
 @app.route("/college")
 def college():
@@ -50,23 +52,87 @@ def receive_index_data():
         selected = "college"
     elif selected == "Coaching Institute":
         selected = "coaching"
-    return redirect("/"+selected)
+    return redirect("/" + selected)
+
 
 # ------------------------------------------------- index.html end-------------------------------------------------
 
 
 # --------------------------------------------------- student ------------------------------------------------
+query = "SELECT * from college_general"
+cursor.execute(query)
+college = cursor.fetchall()
+
+query = "SELECT * from college_admission_criteria"
+cursor.execute(query)
+admission = cursor.fetchall()
+
+query = "SELECT * from college_course"
+cursor.execute(query)
+course = cursor.fetchall()
+
+query = "SELECT * from college_location"
+cursor.execute(query)
+location = cursor.fetchall()
+
+query = "SELECT * from location"
+cursor.execute(query)
+location_all = cursor.fetchall()
+
+final = []
+
+
 @app.route("/student/success", methods=["GET", "POST"])
 def receive_student_data():
     if request.form['submit'] == 'college':  # for top section
-        rank = request.form["rank"]
-        cbse = request.form["cbse-percent"]
+        rank = int(request.form["rank"])
+        cbse = int(request.form["cbse-percent"])
         interest = request.form["interest"]
         exam = request.form["exam-top"]
         state = request.form["state-top"]
-        society = ""
-        # query here
-        return rank+cbse+interest+exam+state
+
+        for i in admission:
+            if rank < i[4]:
+                final.append(college[i[1]-1])
+
+        final_copy = final
+
+        for i in final_copy:
+            if not (admission[i[0] - 1][2] < cbse):
+                final.remove(i)
+
+        final_copy = final
+
+        for i in final_copy:
+            remove = False
+            for j in course:
+
+                if i[0] == j[1]:
+                    if j[2] != interest:
+                        remove = True
+                    else:
+                        remove = False
+                        break
+            if remove:
+                final.remove(i)
+
+        final_copy = final
+
+        for i in final_copy:
+            if i[4] != exam:
+                final.remove(i)
+
+        final_copy = final
+
+        for i in final_copy:
+            for j in location:
+                if j[2] == i[0]:
+                    if location_all[j[0] - 1] != state:
+                        final.remove(i)
+
+        for i in final:
+            print(i)
+        return "Success"
 
     elif request.form['submit'] == 'exam':  # for middle section
         month_of_exam = request.form["choose_month"]
@@ -86,32 +152,33 @@ def receive_student_data():
                 if i == j:
                     print(i)
 
-
         # if not (name_of_exam == ""):
-            # execute3('entrance_exams', name_of_exam)
+        # execute3('entrance_exams', name_of_exam)
 
         return "Success"
 
-    else: # for bottom section
+    else:  # for bottom section
         exam = request.form["exam"]
         state = request.form["state"]
         # query here
         return exam + state
 
 
-def execute1( table, value):
+def execute1(table, value):
     print("SELECT * FROM `" + table + "' WHERE (`exam_month` = '" + str(value) + "')")
     cursor.execute("SELECT * FROM `" + table + "` WHERE (`exam_month` = '" + str(value) + "')")
     res = cursor.fetchall()
     return res
 
-def execute2( table, value):
+
+def execute2(table, value):
     print("SELECT * FROM `" + table + "' WHERE (`mode_of_exam` = '" + str(value) + "')")
     cursor.execute("SELECT * FROM `" + table + "` WHERE (`mode_of_exam` = '" + str(value) + "')")
     res = cursor.fetchall()
     return res
 
-def execute3( table, value):
+
+def execute3(table, value):
     print("SELECT * FROM `" + table + "' WHERE (`exam_name` = '" + str(value) + "')")
     cursor.execute("SELECT * FROM `" + table + "` WHERE (`exam_name` = '" + str(value) + "')")
     res = cursor.fetchall()
@@ -126,7 +193,7 @@ def execute3( table, value):
 
 @app.route("/parent/success", methods=["GET", "POST"])
 def receive_parent_data():
-    if request.form['submit'] == 'college': # for top section
+    if request.form['submit'] == 'college':  # for top section
         fee = request.form["fee"]
         hostel_avail = request.form["hostel"]
         state = request.form["state"]
@@ -134,7 +201,7 @@ def receive_parent_data():
         # query here
         return fee + hostel_avail + state + package
 
-    else: # bottom section
+    else:  # bottom section
         fee = request.form["fee-bottom"]
         hostel_avail = request.form["hostel-bottom"]
         state = request.form["state-bottom"]
@@ -154,6 +221,7 @@ result = cursor.fetchall()
 coaching_names = []
 for j in result:
     coaching_names.append(j[1])
+
 
 @app.route("/coaching/success", methods=["GET", "POST"])
 def receive_coaching_data():
@@ -185,9 +253,12 @@ def receive_coaching_data():
 
 
 def update_coaching(college_id, table, column, value):
-    print("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(college_id) + "')")
-    cursor.execute("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`institute_id` = '" + str(college_id) + "')")
+    print("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(
+        college_id) + "')")
+    cursor.execute("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`institute_id` = '" + str(
+        college_id) + "')")
     mydb.commit()
+
 
 # ---------------------------------------------coaching end----------------------------------------------------------
 
@@ -249,17 +320,18 @@ def receive_college_data():
 
 
 def update(college_id, table, column, value):
-    print("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(college_id) + "')")
-    cursor.execute("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(college_id) + "')")
+    print("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(
+        college_id) + "')")
+    cursor.execute("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(
+        college_id) + "')")
     mydb.commit()
+
 
 # ------------------------------------------------college end---------------------------------------------------------
 
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
 
 # query = "SELECT * from coaching_institute"
 # cursor.execute(query)
@@ -280,11 +352,11 @@ if __name__ == '__main__':
 #                        3] + "', '" + columns[4] + "', '" + columns[5] + "')")
 #     mydb.commit()
 
-    # name = request.form["name"]
-    # exam = request.form["exam"]
-    # selection = request.form["selection"]
-    # location = request.form["location"]
-    # fee = request.form["fee"]
-    # hostel_availability = request.form["hostel"]
-    # columns = [name, location, exam, fee, hostel_availability, selection]
-    # insert(columns)
+# name = request.form["name"]
+# exam = request.form["exam"]
+# selection = request.form["selection"]
+# location = request.form["location"]
+# fee = request.form["fee"]
+# hostel_availability = request.form["hostel"]
+# columns = [name, location, exam, fee, hostel_availability, selection]
+# insert(columns)
