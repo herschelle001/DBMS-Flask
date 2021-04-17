@@ -11,13 +11,11 @@ mydb = mysql.connector.connect(
 )
 cursor = mydb.cursor()
 
-
 # ----------------------------------------------- routes ---------------------------------------------------------
 
 @app.route("/")
 def main_page():
     return render_template("index.html")
-
 
 @app.route("/college")
 def college():
@@ -52,87 +50,23 @@ def receive_index_data():
         selected = "college"
     elif selected == "Coaching Institute":
         selected = "coaching"
-    return redirect("/" + selected)
-
+    return redirect("/"+selected)
 
 # ------------------------------------------------- index.html end-------------------------------------------------
 
 
 # --------------------------------------------------- student ------------------------------------------------
-query = "SELECT * from college_general"
-cursor.execute(query)
-college = cursor.fetchall()
-
-query = "SELECT * from college_admission_criteria"
-cursor.execute(query)
-admission = cursor.fetchall()
-
-query = "SELECT * from college_course"
-cursor.execute(query)
-course = cursor.fetchall()
-
-query = "SELECT * from college_location"
-cursor.execute(query)
-location = cursor.fetchall()
-
-query = "SELECT * from location"
-cursor.execute(query)
-location_all = cursor.fetchall()
-
-final = []
-
-
 @app.route("/student/success", methods=["GET", "POST"])
 def receive_student_data():
     if request.form['submit'] == 'college':  # for top section
-        rank = int(request.form["rank"])
-        cbse = int(request.form["cbse-percent"])
+        rank = request.form["rank"]
+        cbse = request.form["cbse-percent"]
         interest = request.form["interest"]
         exam = request.form["exam-top"]
         state = request.form["state-top"]
-
-        for i in admission:
-            if rank < i[4]:
-                final.append(college[i[1]-1])
-
-        final_copy = final
-
-        for i in final_copy:
-            if not (admission[i[0] - 1][2] < cbse):
-                final.remove(i)
-
-        final_copy = final
-
-        for i in final_copy:
-            remove = False
-            for j in course:
-
-                if i[0] == j[1]:
-                    if j[2] != interest:
-                        remove = True
-                    else:
-                        remove = False
-                        break
-            if remove:
-                final.remove(i)
-
-        final_copy = final
-
-        for i in final_copy:
-            if i[4] != exam:
-                final.remove(i)
-
-        final_copy = final
-
-        for i in final_copy:
-            for j in location:
-                if j[2] == i[0]:
-                    if location_all[j[0] - 1] != state:
-                        final.remove(i)
-
-        for i in final:
-            print(i)
-        return "Success"
+        society = ""
+        # query here
+        return rank+cbse+interest+exam+state
 
     elif request.form['submit'] == 'exam':  # for middle section
         month_of_exam = request.form["choose_month"]
@@ -155,15 +89,6 @@ def receive_student_data():
             for i in month_res:
                 print(i)
 
-<<<<<<< Updated upstream
-        # if not (name_of_exam == ""):
-        # execute3('entrance_exams', name_of_exam)
-
-        return "Success"
-
-    else:  # for bottom section
-        exam = request.form["exam"]
-=======
         elif (mode_of_exam == "") and not (mode_of_exam == ""):
             exam_res = execute2('entrance_exams', mode_of_exam)
             for i in exam_res:
@@ -176,72 +101,75 @@ def receive_student_data():
 
     else: # for bottom section
         exam_to_prepare = request.form["exam_name"]
->>>>>>> Stashed changes
         state = request.form["state"]
         # query here
-        return exam + state
+        # if only exam name is selected
+        if not (exam_to_prepare == "") and (state == ""):
+            execute4('coaching_institute', 'exam_to_prepare')
+        # if only state is selected
+        elif not (state == "") and (exam_to_prepare == ""):
+            execute5( 'coaching_institute', 'state')
+        # if both are selected
+        elif not (state == "") and not (exam_to_prepare == ""):
+            execute6( 'coaching_institute', 'state','exam_to_prepare')
+        return "Success"
 
 
-def execute1(table, value):
+def execute1( table, value):
     print("SELECT * FROM `" + table + "' WHERE (`exam_month` = '" + str(value) + "')")
     cursor.execute("SELECT * FROM `" + table + "` WHERE (`exam_month` = '" + str(value) + "')")
     res = cursor.fetchall()
     return res
 
-
-def execute2(table, value):
+def execute2( table, value):
     print("SELECT * FROM `" + table + "' WHERE (`mode_of_exam` = '" + str(value) + "')")
     cursor.execute("SELECT * FROM `" + table + "` WHERE (`mode_of_exam` = '" + str(value) + "')")
     res = cursor.fetchall()
     return res
 
-
-def execute3(table, value):
+def execute3( table, value):
     print("SELECT * FROM `" + table + "' WHERE (`exam_name` = '" + str(value) + "')")
     cursor.execute("SELECT * FROM `" + table + "` WHERE (`exam_name` = '" + str(value) + "')")
     res = cursor.fetchall()
     for i in res:
         print(i)
 
+def execute4( table, value):
+    print("SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON (location.location_id = coaching_institute.location_id) WHERE (`entrance_exams.exam_name` = '" + str(value) + "')")
+    cursor.execute("SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON (location.location_id = coaching_institute.location_id) WHERE (`entrance_exams.exam_name` = '" + str(value) + "')")
+    res=cursor.fetchall()
+    for i in res:
+        print(i)
 
+def execute5( table, value):
+    print("SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON (location.location_id = coaching_institute.location_id) WHERE (`entrance_exams.exam_name` = '" + str(valuee) + "') AND (`location.state` = '" + str(values) + "')")
+    cursor.execute("SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON (location.location_id = coaching_institute.location_id) WHERE (`entrance_exams.exam_name` = '" + str(valuee) + "') AND (`location.state` = '" + str(values) + "')")
+    res=cursor.fetchall()
+    for i in res:
+        print(i)
+
+def execute6( table, values, valuee):
+    print("SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON (location.location_id = coaching_institute.location_id) WHERE (`location.state` = '" + str(value) + "')")
+    cursor.execute("SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON (location.location_id = coaching_institute.location_id) WHERE (`location.state` = '" + str(value) + "')")
+    res=cursor.fetchall()
+    for i in res:
+        print(i)
 # ------------------------------------------------- student end-------------------------------------------------
 
 
 # --------------------------------------------------- parent -------------------------------------------------
+
 @app.route("/parent/success", methods=["GET", "POST"])
 def receive_parent_data():
-    if request.form['submit'] == 'college':  # for top section
-        fee = request.form.get("fee")
-        hostel_avail = request.form.get("hostel")
+    if request.form['submit'] == 'college': # for top section
+        fee = request.form["fee"]
+        hostel_avail = request.form["hostel"]
         state = request.form["state"]
-        package = request.form.get("pkg")
+        package = request.form["pkg"]
+        # query here
+        return fee + hostel_avail + state + package
 
-        if fee == '1':
-            fee = '1000000000'
-        elif fee == '2':
-            fee = "50000"
-        elif fee == '3':
-            fee = '100000'
-        else:
-            fee = '200000'
-
-        if package == '1':
-            package = '1'
-        elif package == '2':
-            package = '6'
-        elif package == '3':
-            package = '10'
-        else:
-            package = '15'
-
-        if state == 'Any':
-            res = func2(fee, hostel_avail, package)
-        else:
-            res = func(fee, hostel_avail, state, package)
-
-        return f'{res}'
-
-    else:  # bottom section
+    else: # bottom section
         fee = request.form["fee-bottom"]
         hostel_avail = request.form["hostel-bottom"]
         state = request.form["state-bottom"]
@@ -249,38 +177,6 @@ def receive_parent_data():
         # query here
         return fee + hostel_avail + state + package
 
-def func(fee, hostel, state, package):
-    print(("Select `full_name` from `college_general` LEFT OUTER JOIN `college_placement_stats` ON "
-                   "(`college_placement_stats`.`college_id` = `college_general`.`college_id`) "
-                   "LEFT OUTER JOIN college_location ON "
-                   "(`college_location`.`college_id` = `college_general`.`college_id`) LEFT OUTER JOIN location ON "
-                   "(`location`.`location_id` = `college_location`.`location_id`) WHERE "
-                   "(`fees` < '" + fee + "') and (`avg_package` > '" + package + "') and (`state` = '" + state + "')"))
-
-    cursor.execute("Select `full_name` from `college_general` LEFT OUTER JOIN `college_placement_stats` ON "
-                   "(`college_placement_stats`.`college_id` = `college_general`.`college_id`) "
-                   "LEFT OUTER JOIN college_location ON "
-                   "(`college_location`.`college_id` = `college_general`.`college_id`) LEFT OUTER JOIN location ON "
-                   "(`location`.`location_id` = `college_location`.`location_id`) WHERE "
-                   "(`fees` < '" + fee + "') and (`avg_package` > '" + package + "') and (`state` = '" + state + "')")
-    res = cursor.fetchall()
-    return res
-
-def func2(fee, hostel, package):
-    print("Select `full_name` from `college_general` LEFT OUTER JOIN `college_placement_stats` ON "
-                   "(`college_placement_stats`.`college_id` = `college_general`.`college_id`) "
-                   "LEFT OUTER JOIN college_location ON "
-                   "(`college_location`.`college_id` = `college_general`.`college_id`) LEFT OUTER JOIN location ON "
-                   "(`location`.`location_id` = `college_location`.`location_id`) WHERE "
-                   "(`fees` < '" + fee + "') and (`avg_package` > '" + package + "')")
-    cursor.execute("Select `full_name` from `college_general` LEFT OUTER JOIN `college_placement_stats` ON "
-                   "(`college_placement_stats`.`college_id` = `college_general`.`college_id`) "
-                   "LEFT OUTER JOIN college_location ON "
-                   "(`college_location`.`college_id` = `college_general`.`college_id`) LEFT OUTER JOIN location ON "
-                   "(`location`.`location_id` = `college_location`.`location_id`) WHERE "
-                   "(`fees` < '" + fee + "') and (`avg_package` > '" + package + "')")
-    res = cursor.fetchall()
-    return res
 
 # --------------------------------------------------parent end--------------------------------------------------
 
@@ -293,7 +189,6 @@ result = cursor.fetchall()
 coaching_names = []
 for j in result:
     coaching_names.append(j[1])
-
 
 @app.route("/coaching/success", methods=["GET", "POST"])
 def receive_coaching_data():
@@ -325,12 +220,9 @@ def receive_coaching_data():
 
 
 def update_coaching(college_id, table, column, value):
-    print("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(
-        college_id) + "')")
-    cursor.execute("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`institute_id` = '" + str(
-        college_id) + "')")
+    print("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(college_id) + "')")
+    cursor.execute("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`institute_id` = '" + str(college_id) + "')")
     mydb.commit()
-
 
 # ---------------------------------------------coaching end----------------------------------------------------------
 
@@ -392,18 +284,17 @@ def receive_college_data():
 
 
 def update(college_id, table, column, value):
-    print("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(
-        college_id) + "')")
-    cursor.execute("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(
-        college_id) + "')")
+    print("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(college_id) + "')")
+    cursor.execute("UPDATE `" + table + "` SET `" + column + "` = '" + value + "' WHERE (`college_id` = '" + str(college_id) + "')")
     mydb.commit()
-
 
 # ------------------------------------------------college end---------------------------------------------------------
 
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
 
 # query = "SELECT * from coaching_institute"
 # cursor.execute(query)
@@ -424,11 +315,11 @@ if __name__ == '__main__':
 #                        3] + "', '" + columns[4] + "', '" + columns[5] + "')")
 #     mydb.commit()
 
-# name = request.form["name"]
-# exam = request.form["exam"]
-# selection = request.form["selection"]
-# location = request.form["location"]
-# fee = request.form["fee"]
-# hostel_availability = request.form["hostel"]
-# columns = [name, location, exam, fee, hostel_availability, selection]
-# insert(columns)
+    # name = request.form["name"]
+    # exam = request.form["exam"]
+    # selection = request.form["selection"]
+    # location = request.form["location"]
+    # fee = request.form["fee"]
+    # hostel_availability = request.form["hostel"]
+    # columns = [name, location, exam, fee, hostel_availability, selection]
+    # insert(columns)
