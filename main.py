@@ -64,15 +64,33 @@ def receive_student_data():
         interest = request.form["interest"]
         exam = request.form["exam-top"]
         state = request.form["state-top"]
+        society = ""
         # query here
         return rank+cbse+interest+exam+state
 
     elif request.form['submit'] == 'exam':  # for middle section
-        date = request.form["date"]
+        month_of_exam = request.form["choose_month"]
         mode_of_exam = request.form["mode-of-exam"]
-        stream = request.form["stream"]
-        # query here
-        return date + mode_of_exam + stream
+        name_of_exam = request.form["exam_name"]
+
+        month_res = []
+        exam_res = []
+        if not (month_of_exam == ""):
+            month_res = execute1('entrance_exams', month_of_exam)
+
+        if not (mode_of_exam == ""):
+            exam_res = execute2('entrance_exams', mode_of_exam)
+
+        for i in month_res:
+            for j in exam_res:
+                if i == j:
+                    print(i)
+
+
+        # if not (name_of_exam == ""):
+            # execute3('entrance_exams', name_of_exam)
+
+        return "Success"
 
     else: # for bottom section
         exam = request.form["exam"]
@@ -80,54 +98,28 @@ def receive_student_data():
         # query here
         return exam + state
 
+
+def execute1( table, value):
+    print("SELECT * FROM `" + table + "' WHERE (`exam_month` = '" + str(value) + "')")
+    cursor.execute("SELECT * FROM `" + table + "` WHERE (`exam_month` = '" + str(value) + "')")
+    res = cursor.fetchall()
+    return res
+
+def execute2( table, value):
+    print("SELECT * FROM `" + table + "' WHERE (`mode_of_exam` = '" + str(value) + "')")
+    cursor.execute("SELECT * FROM `" + table + "` WHERE (`mode_of_exam` = '" + str(value) + "')")
+    res = cursor.fetchall()
+    return res
+
+def execute3( table, value):
+    print("SELECT * FROM `" + table + "' WHERE (`exam_name` = '" + str(value) + "')")
+    cursor.execute("SELECT * FROM `" + table + "` WHERE (`exam_name` = '" + str(value) + "')")
+    res = cursor.fetchall()
+    for i in res:
+        print(i)
+
+
 # ------------------------------------------------- student end-------------------------------------------------
-
-query = "SELECT * from entrance_exam"
-cursor.execute(query)
-result = cursor.fetchall()
-entrance_exams = []
-for j in result:
-    entrance_exams.append(j[2])
-
-
-@app.route("/college/success", methods=["GET", "POST"])
-def receive_exam_data():
-    selected = request.form["selected"]
-    exam_id = -1
-    for i in range(len(entrance_exams)):
-        if selected == entrance_exams[i]:
-            exam_id = i + 1
-            break
-
-    month_of_exam = request.form["choose_month"]
-    mode_of_exam = request.form["mode-of-exam"]
-    name_of_exam = request.form["exam_name"]
-
-    if not (month_of_exam == ""):
-        execute1('entrance_exams', month_of_exam)
-
-    if not (mode_of_exam == ""):
-        execute2('entrance_exams', mode_of_exam)
-
-    if not (name_of_exam == ""):
-        execute3('entrance_exams', name_of_exam)
-
-    return "Success"
-
-    def execute1( table, value):
-        print("SELECT * FROM `" + table + "' WHERE (`month` = '" + str(value) + "')")
-        cursor.execute("SELECT * FROM `" + table + "' WHERE (`month` = '" + str(value) + "')")
-        mydb.commit()
-
-    def execute2( table, value):
-        print("SELECT * FROM `" + table + "' WHERE (`mode_of_exam` = '" + str(value) + "')")
-        cursor.execute("SELECT * FROM `" + table + "' WHERE (`mode_of_exam` = '" + str(value) + "')")
-        mydb.commit()
-
-    def execute3( table, value):
-        print("SELECT * FROM `" + table + "' WHERE (`exam_name` = '" + str(value) + "')")
-        cursor.execute("SELECT * FROM `" + table + "' WHERE (`exam_name` = '" + str(value) + "')")
-        mydb.commit()
 
 
 # --------------------------------------------------- parent -------------------------------------------------
