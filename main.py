@@ -135,23 +135,49 @@ def execute3( table, value):
         print(i)
 
 def execute4( table, value):
-    print("SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON (location.location_id = coaching_institute.location_id) WHERE (`entrance_exams.exam_name` = '" + str(value) + "')")
-    cursor.execute("SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON (location.location_id = coaching_institute.location_id) WHERE (`entrance_exams.exam_name` = '" + str(value) + "')")
+    print("SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON"
+    " (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON"
+    " (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON"
+    " (location.location_id = coaching_institute.location_id) "
+    " WHERE (`entrance_exams`.`exam_name` = '" + str(value) + "')")
+    cursor.execute("SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON"
+    " (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON"
+    " (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON"
+    " (location.location_id = coaching_institute.location_id) "
+    " WHERE (`entrance_exams`.`exam_name` = '" + str(value) + "')")
     res=cursor.fetchall()
     for i in res:
         print(i)
 
 def execute5( table, value):
-    print("SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON (location.location_id = coaching_institute.location_id) WHERE (`entrance_exams.exam_name` = '" + str(valuee) + "') AND (`location.state` = '" + str(values) + "')")
-    cursor.execute("SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON (location.location_id = coaching_institute.location_id) WHERE (`entrance_exams.exam_name` = '" + str(valuee) + "') AND (`location.state` = '" + str(values) + "')")
-    res=cursor.fetchall()
+    print(
+        "SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON"
+        " (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON"
+        " (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON"
+        " (location.location_id = coaching_institute.location_id) "
+        " WHERE (`location`.`state` = '" + str(value) + "')")
+    cursor.execute(
+        "SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON"
+        " (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON"
+        " (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON"
+        " (location.location_id = coaching_institute.location_id) "
+        " WHERE (`location`.`state` = '" + str(value) + "')")
+    res = cursor.fetchall()
     for i in res:
         print(i)
 
 def execute6( table, values, valuee):
-    print("SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON (location.location_id = coaching_institute.location_id) WHERE (`location.state` = '" + str(value) + "')")
-    cursor.execute("SELECT * FROM `" + table + " LEFT OUTER JOIN coaching_institute_exam ON (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON (location.location_id = coaching_institute.location_id) WHERE (`location.state` = '" + str(value) + "')")
-    res=cursor.fetchall()
+
+    print(
+        "SELECT * FROM `" + table + "` LEFT OUTER JOIN coaching_institute_exam ON"
+        " (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON"
+        " (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON"
+        " (location.location_id = coaching_institute.location_id) "
+        " WHERE (`entrance_exams`.`exam_name` = '" + str(valuee) + "') "
+        " AND (`location`.`state` = '" + str(values) + "')")
+    cursor.execute(
+        "SELECT * FROM `" + table + "` LEFT OUTER JOIN coaching_institute_exam ON (coaching_institute_exam.institute_id= coaching_institute.institute_id) LEFT OUTER JOIN entrance_exams ON (entrance_exams.exam_id = coaching_institute_exam.exam_id) LEFT OUTER JOIN location ON (location.location_id = coaching_institute.location_id) WHERE (`entrance_exams`.`exam_name` = '" + str(valuee) + "') AND (`location`.`state` = '" + str(values) + "')")
+    res = cursor.fetchall()
     for i in res:
         print(i)
 # ------------------------------------------------- student end-------------------------------------------------
