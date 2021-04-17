@@ -195,30 +195,33 @@ def receive_parent_data():
     if request.form['submit'] == 'college':  # for top section
         fee = request.form.get("fee")
         hostel_avail = request.form.get("hostel")
-        state = request.form.get("state")
+        state = request.form["state"]
         package = request.form.get("pkg")
 
-        if fee == 1:
+        if fee == '1':
             fee = '1000000000'
-        elif fee == 2:
+        elif fee == '2':
             fee = "50000"
-        elif fee == 3:
+        elif fee == '3':
             fee = '100000'
         else:
             fee = '200000'
 
-        if package == 1:
+        if package == '1':
             package = '1'
-        elif package == 2:
+        elif package == '2':
             package = '6'
-        elif package == 3:
+        elif package == '3':
             package = '10'
         else:
             package = '15'
 
-        result = func(fee, hostel_avail, state, package)
+        if state == 'Any':
+            res = func2(fee, hostel_avail, package)
+        else:
+            res = func(fee, hostel_avail, state, package)
 
-        return f'{result}'
+        return f'{res}'
 
     else:  # bottom section
         fee = request.form["fee-bottom"]
@@ -242,6 +245,22 @@ def func(fee, hostel, state, package):
                    "(`college_location`.`college_id` = `college_general`.`college_id`) LEFT OUTER JOIN location ON "
                    "(`location`.`location_id` = `college_location`.`location_id`) WHERE "
                    "(`fees` < '" + fee + "') and (`avg_package` > '" + package + "') and (`state` = '" + state + "')")
+    res = cursor.fetchall()
+    return res
+
+def func2(fee, hostel, package):
+    print("Select `full_name` from `college_general` LEFT OUTER JOIN `college_placement_stats` ON "
+                   "(`college_placement_stats`.`college_id` = `college_general`.`college_id`) "
+                   "LEFT OUTER JOIN college_location ON "
+                   "(`college_location`.`college_id` = `college_general`.`college_id`) LEFT OUTER JOIN location ON "
+                   "(`location`.`location_id` = `college_location`.`location_id`) WHERE "
+                   "(`fees` < '" + fee + "') and (`avg_package` > '" + package + "')")
+    cursor.execute("Select `full_name` from `college_general` LEFT OUTER JOIN `college_placement_stats` ON "
+                   "(`college_placement_stats`.`college_id` = `college_general`.`college_id`) "
+                   "LEFT OUTER JOIN college_location ON "
+                   "(`college_location`.`college_id` = `college_general`.`college_id`) LEFT OUTER JOIN location ON "
+                   "(`location`.`location_id` = `college_location`.`location_id`) WHERE "
+                   "(`fees` < '" + fee + "') and (`avg_package` > '" + package + "')")
     res = cursor.fetchall()
     return res
 
