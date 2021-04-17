@@ -141,17 +141,21 @@ def receive_student_data():
 
         month_res = []
         exam_res = []
-        if not (month_of_exam == ""):
+
+        if not (month_of_exam == "") and not (mode_of_exam == ""):
             month_res = execute1('entrance_exams', month_of_exam)
-
-        if not (mode_of_exam == ""):
             exam_res = execute2('entrance_exams', mode_of_exam)
+            for i in month_res:
+                for j in exam_res:
+                    if i == j:
+                        print(i)
 
-        for i in month_res:
-            for j in exam_res:
-                if i == j:
-                    print(i)
+        elif not (month_of_exam == "") and (mode_of_exam == ""):
+            month_res = execute1('entrance_exams', month_of_exam)
+            for i in month_res:
+                print(i)
 
+<<<<<<< Updated upstream
         # if not (name_of_exam == ""):
         # execute3('entrance_exams', name_of_exam)
 
@@ -159,6 +163,20 @@ def receive_student_data():
 
     else:  # for bottom section
         exam = request.form["exam"]
+=======
+        elif (mode_of_exam == "") and not (mode_of_exam == ""):
+            exam_res = execute2('entrance_exams', mode_of_exam)
+            for i in exam_res:
+                print(i)
+
+        if not (name_of_exam == ""):
+            execute3( 'entrance_exams', name_of_exam)
+
+        return "Success"
+
+    else: # for bottom section
+        exam_to_prepare = request.form["exam_name"]
+>>>>>>> Stashed changes
         state = request.form["state"]
         # query here
         return exam + state

@@ -171,8 +171,16 @@
                 <form action="{{ url_for('receive_student_data') }}" method="post" class="needs-validation" novalidate>
 
                     <div class="col-md-4">
-                        <label class=form-label">Exam</label>
-                        <input class="form-control" name="exam">
+                        <label class=form-label">Exam to Prepare</label>
+                        <select class="form-select" name="exam_name">
+                            <option value="">Choose...</option>
+                            <option>Jee Main</option>
+                            <option>Jee Advanced</option>
+                            <option>Bitsat</option>
+                            <option>NDA</option>
+                            <option>VITEEE</option>
+                            <option>UPSEE</option>
+                        </select>
                     </div>
 
 
