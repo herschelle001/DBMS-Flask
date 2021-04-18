@@ -57,6 +57,8 @@ def receive_index_data():
 
 # ------------------------------------------------- index.html end-------------------------------------------------
 
+# ------------------------------------------------- student -------------------------------------------------
+
 @app.route("/student/success", methods=["GET", "POST"])
 def receive_student_data():
     if request.form['submit'] == 'college':  # for top section
